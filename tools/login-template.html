@@ -41,7 +41,9 @@ button[disabled]{opacity:.6;cursor:progress}
    Без верных логина и пароля его нельзя ни открыть, ни прочитать в исходном коде страницы. */
 const PAYLOAD = /*__PAYLOAD__*/;
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-try { const t = localStorage.getItem("kbr-theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+// тема по умолчанию тёмная, как у дашборда
+let theme = "dark"; try { theme = localStorage.getItem("kbr-theme-v2") || "dark"; } catch (e) {}
+document.documentElement.setAttribute("data-theme", theme);
 async function deriveKey(login, password) {
   const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(login + "\n" + password), "PBKDF2", false, ["deriveKey"]);
   return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(PAYLOAD.salt), iterations: PAYLOAD.iterations, hash: "SHA-256" },
